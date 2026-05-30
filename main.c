@@ -227,3 +227,114 @@ void insertionSort(int arr[], int n) {
         arr[j + 1] = key;
     }
 }
+// 3. Selection Sort (Ascending)
+void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_idx]) {
+                min_idx = j;
+            }
+        }
+        int temp = arr[min_idx];
+        arr[min_idx] = arr[i];
+        arr[i] = temp;
+    }
+}
+
+// 4. Merge Sort (String Ascending)
+void merge(char arr[][MAX_LEN], int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+
+    // Alokasi temporary array dinamis agar tidak overflow di stack
+    char *L = (char *)malloc(n1 * sizeof(char *));
+    char *R = (char *)malloc(n2 * sizeof(char *));
+    for (int i = 0; i < n1; i++) L[i] = (char *)malloc(MAX_LEN * sizeof(char));
+    for (int j = 0; j < n2; j++) R[j] = (char *)malloc(MAX_LEN * sizeof(char));
+
+    for (int i = 0; i < n1; i++) strcpy(L[i], arr[l + i]);
+    for (int j = 0; j < n2; j++) strcpy(R[j], arr[m + 1 + j]);
+
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+        if (strcmp(L[i], R[j]) <= 0) {
+            strcpy(arr[k], L[i]);
+            i++;
+        } else {
+            strcpy(arr[k], R[j]);
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        strcpy(arr[k], L[i]);
+        i++;
+        k++;
+    }
+    while (j < n2) {
+        strcpy(arr[k], R[j]);
+        j++;
+        k++;
+    }
+
+    // Free memory temp array
+    for (int i = 0; i < n1; i++) free(L[i]);
+    for (int j = 0; j < n2; j++) free(R[j]);
+    free(L); free(R);
+}
+
+void mergeSort(char arr[][MAX_LEN], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+// 5. Quick Sort (String Ascending)
+int partition(char arr[][MAX_LEN], int low, int high) {
+    char pivot[MAX_LEN];
+    strcpy(pivot, arr[high]);
+    int i = (low - 1);
+
+    for (int j = low; j <= high - 1; j++) {
+        if (strcmp(arr[j], pivot) < 0) {
+            i++;
+            char temp[MAX_LEN];
+            strcpy(temp, arr[i]);
+            strcpy(arr[i], arr[j]);
+            strcpy(arr[j], temp);
+        }
+    }
+    char temp[MAX_LEN];
+    strcpy(temp, arr[i + 1]);
+    strcpy(arr[i + 1], arr[high]);
+    strcpy(arr[high], temp);
+    return (i + 1);
+}
+
+void quickSort(char arr[][MAX_LEN], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+// 6. Shell Sort (String Ascending)
+void shellSort(char arr[][MAX_LEN], int n) {
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; i += 1) {
+            char temp[MAX_LEN];
+            strcpy(temp, arr[i]);
+            int j;
+            for (j = i; j >= gap && strcmp(arr[j - gap], temp) > 0; j -= gap) {
+                strcpy(arr[j], arr[j - gap]);
+            }
+            strcpy(arr[j], temp);
+        }
+    }
+}
