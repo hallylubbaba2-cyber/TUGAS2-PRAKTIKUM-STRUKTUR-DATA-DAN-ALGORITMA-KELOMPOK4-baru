@@ -249,13 +249,13 @@ void merge(char arr[][MAX_LEN], int l, int m, int r) {
 
     // Alokasi temporary array dinamis agar tidak overflow di stack
     char **L = (char **)malloc(n1 * sizeof(char *));
-    char **R = (char *)malloc(n2 * sizeof(char *));
+    char **R = (char ** )malloc(n2 * sizeof(char *));
     for (int i = 0; i < n1; i++) L[i] = (char *)malloc(MAX_LEN * sizeof(char));
     for (int j = 0; j < n2; j++) R[j] = (char *)malloc(MAX_LEN * sizeof(char));
 
     for (int i = 0; i < n1; i++) strcpy(L[i], arr[l + i]);
     for (int j = 0; j < n2; j++) strcpy(R[j], arr[m + 1 + j]);
-
+ 
     int i = 0, j = 0, k = l;
     while (i < n1 && j < n2) {
         if (strcmp(L[i], R[j]) <= 0) {
